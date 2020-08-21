@@ -24,6 +24,18 @@ static const char *colors[][3]      = {
 	[SchemeSel]  = { col_gray4, col_cyan,  col_white  },
 };
 
+typedef struct {
+	const char *name;
+	const void *cmd;
+} Sp;
+const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL };
+const char *spcmd2[] = {"st", "-n", "sppython", "-g", "120x34", "-e", "python", NULL };
+static Sp scratchpads[] = {
+	/* name          cmd  */
+	{"spterm",      spcmd1},
+	{"sppython",    spcmd2},
+};
+
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
@@ -35,6 +47,8 @@ static const Rule rules[] = {
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
 	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	{ NULL,		  "spterm",	  NULL,		SPTAG(0),		1,			 -1 },
+	{ NULL,		  "sppython", NULL,		SPTAG(1),		1,			 -1 },
 };
 
 /* layout(s) */
@@ -75,6 +89,8 @@ static const char *termcmd[]  = { "st", NULL };
 #include "push.c"
 static Key keys[] = {
 	/* modifier                     key        function        argument */
+	{ MODKEY|ControlMask,           XK_Return, togglescratch,  {.ui = 0 } },
+	{ MODKEY|ControlMask,           XK_p,	   togglescratch,  {.ui = 1 } },
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
